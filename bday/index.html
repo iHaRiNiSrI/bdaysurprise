@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Umang</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- React 18 & ReactDOM CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel Standalone CDN -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #FFF0F4;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #F472B6;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #BE185D;
+    }
+
+    @keyframes pulseGlow {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.6;
+        transform: scale(1.08);
+      }
+    }
+
+    .pulse-glow {
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes floatHeart {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(5deg) scale(1.06);
+      }
+    }
+
+    .floating-heart {
+      animation: floatHeart 5.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-gradient-to-br from-[#FFF0F5] via-[#FFE4E9] to-[#FCE7F3] text-[#4A0E2E] antialiased selection:bg-pink-500 selection:text-white">
+  <div id="root"></div>
+
+  <!-- React Application Script -->
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ============================================================================
+    // 💖 1. CUSTOMIZE YOUR BIRTHDAY DETAILS HERE
+    // ============================================================================
+    const BIRTHDAY_DATA = {
+      // Recipient & Sender Names
+      recipientName: "Umang",
+      nickname: "Bachhhuuuu",
+      senderName: "Yours Forever",
+      vaultPassword: "harinilovesumang",
+
+      // The Three-Chapter Memory Timeline
+      timelineTitle: "How Much I Love You",
+      timelineSubtitle: "Three chapters of our story — from the day we met to forever",
+      timeline: [
+        {
+          id: 1,
+          stepNumber: 1,
+          chapter: "Chapter 1",
+          badge: "The Beginning",
+          title: "How We First Met",
+          date: "The Beginning of Us",
+          location: "Where My World Changed",
+          localPhotoUrl: "./photos/chapter1.jpg",
+          fallbackUrl: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80",
+          description: "Sometimes, I wonder what kind of magic brought me closer to you. 🥹❤️ There was something so special about you that slowly made my heart fall for you, even before I could understand what was happening. Little did I know that the person I was getting closer to would one day become such a beautiful and important part of my life. I never imagined that this little beginning would turn into something so precious, so meaningful, and so full of love. If someone had told me that day how special you would become to me, I would have smiled, but I could never have imagined just how deeply I would fall for you. ❤️✨"
+        },
+        {
+          id: 2,
+          stepNumber: 2,
+          chapter: "Chapter 2",
+          badge: "The Proposal 💍",
+          title: "The Day I Proposed to You",
+          date: "December 12, 2024",
+          location: "The Moment You Said Yes 💍",
+          localPhotoUrl: "./photos/chapter2.jpg",
+          fallbackUrl: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80",
+          description: "December 12, 2024 — I love youuu… as a friend, of courseee 🤭😂❤️ Don’t get too excited, mera bachhuuu 😚🫶🏻 Oh waittt, you said you love me more? Awww, someone’s in loveee 🤭💋❤️🧿"
+        },
+        {
+          id: 3,
+          stepNumber: 3,
+          chapter: "Chapter 3",
+          badge: "Forever & Always",
+          title: "Where We Stand Today",
+          date: "Here, With You, Always",
+          location: "Right By Your Side",
+          localPhotoUrl: "./photos/chapter3.jpg",
+          fallbackUrl: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=80",
+          description: "And where we stand today? 🥹❤️ I’m so happy to have you in my life, my cutieee bachhuuu! 🫂💋 You’re the sweetest gift God has ever given me, and I’ll always be by your side, no matter what life brings us. On your happy days, your sad days, and even your grumpy bachhuu days 🤭😂, you’ll always have me. If I could go back to the beginning, I’d still choose you and fall for you all over again. I love you sooo much, my favourite human, my cutest baby, and my forever special person. ❤️🧿🫶🏻 Happy Birthday, my Baby, Umang."
+        }
+      ],
+
+      // Mystery Key & Wishes Game
+      wishesGame: {
+        title: "The Vault of Wishes for Umang",
+        subtitle: "Four enchanted chests hold secrets of what I wish for you, Baby. Choose a key to unlock your destiny.",
+        chests: [
+          {
+            id: 1,
+            title: "Chest of Endless Joy",
+            wishTitle: "Happiness & Peace",
+            wishText: "My bachhuu, ❤️ May your life always be filled with happiness, peaceful days, and endless reasons to smile. Stay happy always, baby! 🫂💋",
+            badge: "Pure Joy"
+          },
+          {
+            id: 2,
+            title: "Chest of Boundless Dreams",
+            wishTitle: "Good Luck & Success",
+            wishText: "My Umang, 🍀❤️ May luck follow you everywhere, your dreams come true, and success find you in everything you do. I believe in you, baby! 😚💋",
+            badge: "Lucky Charm"
+          },
+          {
+            id: 3,
+            title: "Chest of Deep Devotion",
+            wishTitle: "Endless Love & Togetherness",
+            wishText: "Since December 12, 2024, you've been my sweetest blessing. ❤️ I'll always stand by your side, through every high and low. You're my favourite person, my bachhuu! 🧿🫶🏻",
+            badge: "Forever Love"
+          },
+          {
+            id: 4,
+            title: "Chest of Hugs & Kisses",
+            wishTitle: "Unlimited Cuddles & Baby Love",
+            wishText: "My cutuuu bachhuu, 🥹💋 Sending you unlimited hugs, millions of kisses, and the tightest cuddles. I wish I could hold you close and never let go! 🫂❤️",
+            badge: "Hugs & Kisses"
+          }
+        ]
+      },
+
+      // Virtual Cake & Final Wishes
+      cakeSection: {
+        title: "Make A Wish, Baby",
+        subtitle: "Close your eyes, think of your biggest dream for this year, and blow out the candles!",
+        birthdayMessage: `To my birthday boy, my Umang, my lovey-dovey bachhuu ❤️🎂💋
+
+Happy Birthday to the most handsome, kind-hearted, and incredible boyfriend in the entire world! Umang, proposing to you on December 12, 2024, was my dream come true, and loving you every day is my greatest blessing. Today and every single day belongs to you, Baby. ❤️🧿
+
+I don't think I'll ever have enough words to thank you for everything you do for me. Thank you for being there for me, for listening to me, for making me smile, and for being such a special part of my life. Thank you for all the little things you do that might seem ordinary to you but mean the whole world to me. I wish I could hug you really tight right now and tell you a million times how grateful I am to have you. And even after thanking you a million times, I would still have a million more thank-yous left. 🥹🫂❤️
+
+Baby, I promise that I'll always try to make your birthdays as special as you are to me. I'll celebrate this beautiful day every year with all my heart because the day you were born is so important to me, too. It's the day the world received someone who would eventually become my favourite person, my happiness, and my sweetest blessing. I want to make you feel loved, spoiled, appreciated, and celebrated every single birthday. You deserve all the happiness in the universe, my bachhuu! 🎂🎁💋
+
+And my cutuuu Umang, no matter how many birthdays pass, I hope you always remember that you have someone who believes in you, supports your dreams, celebrates your smallest achievements, and stands beside you through every high and low. I'll always be cheering for you, holding your hand, annoying you with my silly talks, stealing your kisses, and loving you in all my little ways. 🤭❤️🫶🏻
+
+A tiny love note for you, baby 💌
+
+If I could ask God for one gift today, it would be to keep you happy, healthy, peaceful, and smiling always. And if I could make one birthday wish for myself, it would be to celebrate many, many more birthdays with you, creating beautiful memories and watching you achieve everything your heart desires. I don't need a perfect love story; I just want our little story, with you and me choosing each other again and again. 🧿💗
+
+Happy Birthday once again, my handsome boy, my favourite human, my lovey-dovey bachhuu! I hope this year brings you endless success, good luck, happiness, and all the beautiful things you deserve. May God always protect you and guide you. And whenever you need a hug, a kiss, a little comfort, or someone to remind you how amazing you are, remember that I'm always here for you.
+
+I love you more than these words can ever explain. Happy Birthday, my baby. You will always be one of my favourite reasons to thank God. ❤️🫂💋
+
+Forever your girl, your biggest cheerleader, and the person who will always want to make your birthday extra special. 💌🎀`
+      },
+
+      // Background Music: Beethoven's Für Elise
+      audio: {
+        title: "Für Elise",
+        artist: "Ludwig van Beethoven",
+        url: "./fur-elise.mp3",
+        fallbackUrl: "https://archive.org/download/WoO59PocoMotoBagatelleInAMinorFurElise/FrEliseWoo59.mp3"
+      }
+    };
+
+    // ============================================================================
+    // ICONS (Custom Lightweight SVG Components matching Lucide React)
+    // ============================================================================
+    const Icons = {
+      Lock: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      ),
+      Unlock: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 9.9-1"></path>
+        </svg>
+      ),
+      Heart: ({ className = "w-6 h-6", fill = "none", stroke = "currentColor", style = {} }) => (
+        <svg className={className} style={style} fill={fill} stroke={stroke} viewBox="0 0 24 24" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+        </svg>
+      ),
+      Sparkles: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+          <path d="M5 3v4"></path><path d="M19 17v4"></path><path d="M3 5h4"></path><path d="M17 19h4"></path>
+        </svg>
+      ),
+      Key: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="m21 2-2 2m-1.5 1.5L16 7l-1.5-1.5-2 2 1.5 1.5L12 11l-1.5-1.5-2 2 1.5 1.5-2 2A6 6 0 1 1 5 11l6.5-6.5"></path>
+          <circle cx="7.5" cy="16.5" r="1.5"></circle>
+        </svg>
+      ),
+      Gift: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="8" width="18" height="4" rx="1"></rect>
+          <path d="M12 8v13"></path>
+          <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"></path>
+          <path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 4.8 0 0 1 12 8a4.8 4.8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"></path>
+        </svg>
+      ),
+      Calendar: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      ),
+      Clock: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      ),
+      MapPin: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+      ),
+      PartyPopper: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5.8 11.3 2 22l10.7-3.79"></path>
+          <path d="M4 3h.01"></path><path d="M22 8h.01"></path><path d="M15 2h.01"></path>
+          <path d="M22 20h.01"></path><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38e-2a2 2 0 0 1-1.41-.59l-.7-.7a2 2 0 0 0-2.83 0L7.5 11.7a2 2 0 0 0 0 2.83l.7.7a2 2 0 0 1 .59 1.42v.38c0 .88-.77 1.55-1.63 1.45v0a2.9 2.9 0 0 0-3.12 1.96L3 22"></path>
+        </svg>
+      ),
+      Flame: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+        </svg>
+      ),
+      Star: ({ className = "w-6 h-6", fill = "none" }) => (
+        <svg className={className} fill={fill} stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      ),
+      CheckCircle2: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="m9 12 2 2 4-4"></path>
+        </svg>
+      ),
+      X: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      ),
+      Eye: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      ),
+      ChevronLeft: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      ),
+      ChevronRight: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      ),
+      Music: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+      ),
+      RotateCcw: ({ className = "w-6 h-6" }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+      )
+    };
+
+    // ============================================================================
+    // APPLICATION COMPONENT (SOFT PINK + SCATTERED DARK PINK HEARTS)
+    // ============================================================================
+    function BirthdayWebsite() {
+      const [currentPage, setCurrentPage] = useState(0);
+
+      // Mystery Wishes Game State
+      const [selectedChest, setSelectedChest] = useState(null);
+      const [isModalOpen, setIsModalOpen] = useState(false);
+
+      // Cake Celebration State
+      const [candlesBlown, setCandlesBlown] = useState(false);
+
+      // Password Protection State
+      const [passcode, setPasscode] = useState("");
+      const [passcodeError, setPasscodeError] = useState("");
+      const [showPasscode, setShowPasscode] = useState(false);
+
+      // Audio (Beethoven - Für Elise) State & Ref
+      const audioRef = useRef(null);
+      const [isPlayingMusic, setIsPlayingMusic] = useState(false);
+
+      const toggleMusic = () => {
+        if (!audioRef.current) return;
+        if (isPlayingMusic) {
+          audioRef.current.pause();
+          setIsPlayingMusic(false);
+        } else {
+          audioRef.current.play().then(() => {
+            setIsPlayingMusic(true);
+          }).catch((err) => {
+            console.warn("Audio play prevented:", err);
+            if (BIRTHDAY_DATA.audio.fallbackUrl && audioRef.current.src !== BIRTHDAY_DATA.audio.fallbackUrl) {
+              audioRef.current.src = BIRTHDAY_DATA.audio.fallbackUrl;
+              audioRef.current.play().then(() => setIsPlayingMusic(true)).catch(() => { });
+            }
+          });
+        }
+      };
+
+      // Keyboard arrow navigation
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (currentPage === 0) return;
+          if (e.key === 'ArrowRight') {
+            goToNextPage();
+          } else if (e.key === 'ArrowLeft') {
+            goToPrevPage();
+          }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+      }, [currentPage]);
+
+      // Confetti Function
+      const fireCelebrationPoppers = () => {
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 140,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#FFF0F4', '#F43F5E', '#BE185D', '#DB2777', '#FFD700']
+          });
+
+          setTimeout(() => {
+            confetti({
+              particleCount: 80,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0 },
+              colors: ['#DB2777', '#BE185D', '#FFF0F4']
+            });
+            confetti({
+              particleCount: 80,
+              angle: 120,
+              spread: 55,
+              origin: { x: 1 },
+              colors: ['#DB2777', '#BE185D', '#FFF0F4']
+            });
+          }, 300);
+        }
+      };
+
+      const goToNextPage = () => {
+        if (currentPage < 5) {
+          setCurrentPage((prev) => prev + 1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+
+      const goToPrevPage = () => {
+        if (currentPage > 1) {
+          setCurrentPage((prev) => prev - 1);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      };
+
+      const handleUnlockVault = () => {
+        setCurrentPage(1);
+        fireCelebrationPoppers();
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          const playPromise = audioRef.current.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                setIsPlayingMusic(true);
+              })
+              .catch((err) => {
+                console.warn("Audio play prevented or error:", err);
+                if (BIRTHDAY_DATA.audio.fallbackUrl && audioRef.current.src !== BIRTHDAY_DATA.audio.fallbackUrl) {
+                  audioRef.current.src = BIRTHDAY_DATA.audio.fallbackUrl;
+                  audioRef.current.play().then(() => setIsPlayingMusic(true)).catch(() => { });
+                }
+              });
+          }
+        }
+      };
+
+      const handlePasscodeSubmit = (e) => {
+        if (e) e.preventDefault();
+        const cleanInput = passcode.trim().toLowerCase();
+        const expected = (BIRTHDAY_DATA.vaultPassword || "harinilovesumang").toLowerCase();
+        if (cleanInput === expected) {
+          setPasscodeError("");
+          handleUnlockVault();
+        } else {
+          setPasscodeError("Oops, incorrect passcode! Hint: Who loves Umang? ❤️");
+        }
+      };
+
+      const handleChestClick = (chest) => {
+        setSelectedChest(chest);
+        setIsModalOpen(true);
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+        }
+      };
+
+      const handleBlowCandles = () => {
+        setCandlesBlown(true);
+        fireCelebrationPoppers();
+        const end = Date.now() + 2.5 * 1000;
+        const interval = setInterval(() => {
+          if (Date.now() > end) return clearInterval(interval);
+          confetti({
+            startVelocity: 35,
+            spread: 360,
+            ticks: 60,
+            origin: { x: Math.random(), y: Math.random() - 0.2 }
+          });
+        }, 350);
+      };
+
+      const pageTitles = [
+        "Vault Lock",
+        "Chapter 1: Met",
+        "Chapter 2: Proposed 💍",
+        "Chapter 3: Today",
+        "Vault of Wishes",
+        "Birthday Cake 🎂"
+      ];
+
+      // Dark Pink Hearts lightly scattered all over the background
+      const backgroundHearts = [
+        { top: '3%', left: '5%', size: 20, delay: '0s', duration: '5.2s', opacity: 0.22 },
+        { top: '5%', left: '25%', size: 16, delay: '1.4s', duration: '6.1s', opacity: 0.18 },
+        { top: '4%', left: '50%', size: 22, delay: '2.8s', duration: '5.5s', opacity: 0.20 },
+        { top: '6%', left: '74%', size: 18, delay: '0.7s', duration: '4.8s', opacity: 0.22 },
+        { top: '4%', left: '92%', size: 24, delay: '2.1s', duration: '6.2s', opacity: 0.19 },
+
+        { top: '15%', left: '10%', size: 20, delay: '3.2s', duration: '5.2s', opacity: 0.18 },
+        { top: '16%', left: '88%', size: 24, delay: '1.1s', duration: '6.5s', opacity: 0.22 },
+        { top: '22%', left: '38%', size: 16, delay: '2.4s', duration: '4.5s', opacity: 0.17 },
+        { top: '25%', left: '3%', size: 22, delay: '0.3s', duration: '5.8s', opacity: 0.21 },
+        { top: '27%', left: '94%', size: 19, delay: '3.7s', duration: '5.0s', opacity: 0.20 },
+
+        { top: '36%', left: '8%', size: 24, delay: '1.8s', duration: '6.1s', opacity: 0.22 },
+        { top: '34%', left: '26%', size: 15, delay: '0.5s', duration: '4.9s', opacity: 0.16 },
+        { top: '38%', left: '72%', size: 20, delay: '2.9s', duration: '5.7s', opacity: 0.19 },
+        { top: '40%', left: '90%', size: 23, delay: '1.3s', duration: '5.3s', opacity: 0.21 },
+
+        { top: '50%', left: '5%', size: 21, delay: '2.7s', duration: '6.4s', opacity: 0.20 },
+        { top: '48%', left: '82%', size: 18, delay: '0.9s', duration: '4.7s', opacity: 0.18 },
+        { top: '54%', left: '18%', size: 15, delay: '3.1s', duration: '5.1s', opacity: 0.16 },
+        { top: '56%', left: '62%', size: 19, delay: '1.6s', duration: '6.0s', opacity: 0.17 },
+
+        { top: '66%', left: '7%', size: 24, delay: '0.2s', duration: '5.6s', opacity: 0.22 },
+        { top: '64%', left: '92%', size: 25, delay: '2.5s', duration: '6.3s', opacity: 0.21 },
+        { top: '70%', left: '35%', size: 16, delay: '1.9s', duration: '4.8s', opacity: 0.16 },
+        { top: '74%', left: '78%', size: 22, delay: '3.4s', duration: '5.4s', opacity: 0.19 },
+
+        { top: '84%', left: '3%', size: 19, delay: '1.0s', duration: '5.0s', opacity: 0.20 },
+        { top: '82%', left: '22%', size: 22, delay: '2.3s', duration: '6.2s', opacity: 0.18 },
+        { top: '86%', left: '50%', size: 17, delay: '0.6s', duration: '4.6s', opacity: 0.17 },
+        { top: '83%', left: '88%', size: 24, delay: '3.0s', duration: '5.9s', opacity: 0.22 },
+        { top: '93%', left: '12%', size: 20, delay: '1.4s', duration: '5.5s', opacity: 0.19 },
+        { top: '91%', left: '68%', size: 18, delay: '2.6s', duration: '5.1s', opacity: 0.18 },
+        { top: '94%', left: '94%', size: 22, delay: '0.8s', duration: '6.0s', opacity: 0.21 }
+      ];
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-[#FFF0F5] via-[#FFE4E9] to-[#FCE7F3] text-[#4A0E2E] relative flex flex-col justify-between overflow-x-hidden selection:bg-pink-500 selection:text-white">
+          {/* Ambient Lighting & Dark Pink Hearts Scattered Lightly */}
+          <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+            <div className="absolute -top-32 -left-32 w-96 h-96 bg-pink-300/35 rounded-full blur-[140px] pulse-glow" />
+            <div className="absolute top-1/2 -right-32 w-96 h-96 bg-rose-300/30 rounded-full blur-[150px] pulse-glow" />
+            <div className="absolute -bottom-32 left-1/3 w-[500px] h-[500px] bg-pink-200/45 rounded-full blur-[160px]" />
+
+            {/* Lightly Scattered Dark Pink Hearts */}
+            {backgroundHearts.map((h, i) => (
+              <div
+                key={i}
+                className="absolute text-[#BE185D] fill-[#BE185D] pointer-events-none select-none floating-heart"
+                style={{
+                  top: h.top,
+                  left: h.left,
+                  width: `${h.size}px`,
+                  height: `${h.size}px`,
+                  opacity: h.opacity,
+                  animationDelay: h.delay,
+                  animationDuration: h.duration
+                }}
+              >
+                <Icons.Heart className="w-full h-full" fill="#BE185D" stroke="#BE185D" />
+              </div>
+            ))}
+          </div>
+
+          {/* Hidden Audio Element for Beethoven's Für Elise */}
+          <audio
+            ref={audioRef}
+            src={BIRTHDAY_DATA.audio.url}
+            loop
+            preload="auto"
+            onPlay={() => setIsPlayingMusic(true)}
+            onPause={() => setIsPlayingMusic(false)}
+          ></audio>
+
+          {/* Top Bar Header */}
+          <header className="relative z-50 flex items-center justify-between px-3 sm:px-8 py-3 max-w-6xl mx-auto w-full">
+            <div className="flex items-center space-x-1.5 sm:space-x-2 text-[#9D174D]">
+              <Icons.Heart className="w-4 h-4 sm:w-5 sm:h-5 text-[#BE185D] fill-[#BE185D] animate-pulse shrink-0" />
+              <span className="text-[11px] sm:text-xs md:text-sm tracking-wider font-bold uppercase truncate max-w-[180px] sm:max-w-none bg-clip-text text-transparent bg-gradient-to-r from-[#831843] to-[#BE185D]">
+                To {BIRTHDAY_DATA.recipientName} ({BIRTHDAY_DATA.nickname})
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              {/* Music Player Button (Für Elise) */}
+              <button
+                onClick={toggleMusic}
+                className={`px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold flex items-center space-x-1.5 transition-all border shadow-sm ${isPlayingMusic
+                    ? 'bg-pink-100 text-[#9D174D] border-pink-400 shadow-[0_0_15px_rgba(190,24,93,0.25)]'
+                    : 'bg-white/80 text-[#831843] border-pink-200 hover:bg-white'
+                  }`}
+                title="Play/Pause Beethoven - Für Elise"
+              >
+                <Icons.Music className={`w-3.5 h-3.5 ${isPlayingMusic ? 'text-[#BE185D] animate-spin' : 'text-[#9D174D]'}`} />
+                <span className="hidden sm:inline">{isPlayingMusic ? "Für Elise (Playing 🎹)" : "Play Für Elise 🎹"}</span>
+                <span className="sm:hidden">{isPlayingMusic ? "Playing 🎹" : "Music 🎹"}</span>
+              </button>
+            </div>
+          </header>
+
+          {/* Floating Extreme-Edge Side Arrow: Previous (Centered in the vertical middle of the page) */}
+          {currentPage > 1 && (
+            <button
+              onClick={goToPrevPage}
+              className="fixed left-1 sm:left-3 md:left-4 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-white/95 hover:bg-gradient-to-r hover:from-[#BE185D] hover:to-[#DB2777] text-[#BE185D] hover:text-white border-2 border-pink-300 hover:border-pink-400 shadow-[0_6px_20px_rgba(190,24,93,0.22)] backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 group cursor-pointer"
+              title="Previous Page"
+              aria-label="Previous Page"
+            >
+              <Icons.ChevronLeft className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 group-hover:-translate-x-0.5 transition-transform stroke-[2.5]" />
+            </button>
+          )}
+
+          {/* Floating Extreme-Edge Side Arrow: Next / Replay (Centered in the vertical middle of the page) */}
+          {currentPage >= 1 && (
+            currentPage < 5 ? (
+              <button
+                onClick={goToNextPage}
+                className="fixed right-1 sm:right-3 md:right-4 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-white/95 hover:bg-gradient-to-r hover:from-[#BE185D] hover:to-[#DB2777] text-[#BE185D] hover:text-white border-2 border-pink-300 hover:border-pink-400 shadow-[0_6px_20px_rgba(190,24,93,0.22)] backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 group cursor-pointer"
+                title="Next Page"
+                aria-label="Next Page"
+              >
+                <Icons.ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 group-hover:translate-x-0.5 transition-transform stroke-[2.5]" />
+              </button>
+            ) : (
+              <button
+                onClick={() => { setCurrentPage(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className="fixed right-1 sm:right-3 md:right-4 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-white/95 hover:bg-gradient-to-r hover:from-[#BE185D] hover:to-[#DB2777] text-[#BE185D] hover:text-white border-2 border-pink-300 hover:border-pink-400 shadow-[0_6px_20px_rgba(190,24,93,0.22)] backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 group cursor-pointer"
+                title="Replay from Step 1"
+                aria-label="Replay from Step 1"
+              >
+                <Icons.RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:-rotate-45 transition-transform stroke-[2.5]" />
+              </button>
+            )
+          )}
+
+          {/* Extreme-Edge Right Arrow on Page 0 */}
+          {currentPage === 0 && (
+            <button
+              onClick={handlePasscodeSubmit}
+              className="fixed right-1 sm:right-3 md:right-4 top-1/2 -translate-y-1/2 z-40 flex items-center justify-center w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-white/95 hover:bg-gradient-to-r hover:from-[#BE185D] hover:to-[#DB2777] text-[#BE185D] hover:text-white border-2 border-pink-300 hover:border-pink-400 shadow-[0_6px_20px_rgba(190,24,93,0.22)] backdrop-blur-md transition-all duration-300 hover:scale-110 active:scale-95 group cursor-pointer animate-pulse"
+              title="Unlock Your Birthday Experience"
+              aria-label="Unlock Your Birthday Experience"
+            >
+              <Icons.ChevronRight className="w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 group-hover:translate-x-0.5 transition-transform stroke-[2.5]" />
+            </button>
+          )}
+
+          {/* ================================================================== */}
+          {/* SCREEN 0: VAULT UNLOCK SCREEN WITH PASSWORD PROTECTION             */}
+          {/* ================================================================== */}
+          {currentPage === 0 && (
+            <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 py-8 text-center animate-fade-in my-auto">
+              <div className="max-w-xl mx-auto space-y-6 sm:space-y-8">
+                {/* Vault Glow Circle */}
+                <div className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#DB2777] to-[#BE185D] opacity-30 blur-2xl animate-pulse" />
+                  <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-b from-[#FFF5F8] to-[#FFE4EE] border-2 border-pink-300 flex items-center justify-center shadow-[0_15px_35px_rgba(190,24,93,0.18)]">
+                    <Icons.Lock className="w-8 h-8 sm:w-10 sm:h-10 text-[#BE185D] animate-bounce" />
+                  </div>
+                </div>
+
+                {/* Vault Text */}
+                <div className="space-y-3">
+                  <div className="inline-flex items-center space-x-2 px-3.5 py-1 sm:px-4 sm:py-1.5 rounded-full bg-pink-100/90 border border-pink-300/80 text-[#9D174D] text-[11px] sm:text-xs font-bold tracking-wider uppercase shadow-sm">
+                    <Icons.Sparkles className="w-3.5 h-3.5 text-[#BE185D]" />
+                    <span>Protected Birthday Vault 🔐</span>
+                  </div>
+                  <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight font-serif bg-clip-text text-transparent bg-gradient-to-r from-[#831843] via-[#BE185D] to-[#DB2777]">
+                    Happy Birthday, <br />
+                    <span className="text-[#BE185D]">{BIRTHDAY_DATA.recipientName}</span>
+                  </h1>
+                  <p className="text-[#6B2D45] text-xs sm:text-sm md:text-base max-w-md mx-auto font-medium leading-relaxed px-2">
+                    A special birthday surprise has been prepared exclusively for you, my {BIRTHDAY_DATA.nickname}. Enter our secret passcode to unlock! ✨
+                  </p>
+                </div>
+
+                {/* Password Input & Glowing Unlock Button */}
+                <form onSubmit={handlePasscodeSubmit} className="max-w-sm mx-auto space-y-3.5 pt-2 w-full">
+                  <div className="relative flex items-center">
+                    <input
+                      type={showPasscode ? "text" : "password"}
+                      value={passcode}
+                      onChange={(e) => {
+                        setPasscode(e.target.value);
+                        if (passcodeError) setPasscodeError("");
+                      }}
+                      placeholder="Enter secret passcode..."
+                      className="w-full px-5 py-3 sm:py-3.5 pr-12 rounded-full bg-white/95 border-2 border-pink-300 focus:border-[#BE185D] focus:ring-4 focus:ring-pink-200 outline-none text-[#4A0E2E] placeholder:text-pink-300 text-sm font-semibold shadow-inner text-center tracking-wider transition-all"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasscode(!showPasscode)}
+                      className="absolute right-3.5 p-1 text-[#BE185D] hover:opacity-80 transition-opacity"
+                      title={showPasscode ? "Hide password" : "Show password"}
+                      aria-label="Toggle password visibility"
+                    >
+                      <Icons.Eye className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  {passcodeError && (
+                    <p className="text-xs font-bold text-[#BE185D] bg-pink-100/90 py-1.5 px-3 rounded-full border border-pink-200 animate-bounce">
+                      {passcodeError}
+                    </p>
+                  )}
+
+                  <div>
+                    <button
+                      type="submit"
+                      className="w-full group relative inline-flex items-center justify-center px-6 sm:px-9 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-white transition-all duration-300 bg-gradient-to-r from-[#BE185D] via-[#DB2777] to-[#E11D48] rounded-full shadow-[0_10px_35px_rgba(219,39,119,0.35)] hover:shadow-[0_15px_45px_rgba(219,39,119,0.55)] hover:scale-105 active:scale-95 cursor-pointer"
+                    >
+                      <Icons.Key className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-pink-100 group-hover:rotate-12 transition-transform" />
+                      <span>Unlock Your Birthday Experience</span>
+                      <Icons.Heart className="w-4 h-4 sm:w-5 sm:h-5 ml-2 fill-white text-white group-hover:scale-125 transition-transform" />
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </main>
+          )}
+
+          {/* ================================================================== */}
+          {/* SCREEN 1, 2, 3: INDIVIDUAL CHAPTER PAGES                           */}
+          {/* ================================================================== */}
+          {currentPage >= 1 && currentPage <= 3 && (
+            <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 sm:px-12 md:px-16 py-6 max-w-4xl mx-auto w-full animate-fade-in">
+              {(() => {
+                const item = BIRTHDAY_DATA.timeline[currentPage - 1];
+                return (
+                  <div className="w-full space-y-6">
+                    {/* Chapter Header */}
+                    <div className="text-center space-y-2">
+                      <div className="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-pink-100 border border-pink-300 text-[#9D174D] text-xs font-bold uppercase tracking-wider shadow-sm">
+                        <Icons.Heart className="w-3.5 h-3.5 fill-[#BE185D] text-[#BE185D]" />
+                        <span>{item.chapter} of 3 • {item.badge}</span>
+                      </div>
+                      <h2 className="text-3xl sm:text-4xl font-bold font-serif text-[#4A0E2E]">
+                        {item.title}
+                      </h2>
+                    </div>
+
+                    {/* Focused Card */}
+                    <div className="bg-white/85 border border-pink-200/90 rounded-3xl p-6 sm:p-8 shadow-[0_15px_45px_rgba(190,24,93,0.08)] backdrop-blur-md grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                      {/* Photo */}
+                      <div className="relative w-full h-64 sm:h-80 rounded-2xl overflow-hidden bg-pink-100 shadow-md border border-pink-200 group">
+                        <img
+                          src={item.localPhotoUrl || item.imageUrl}
+                          alt={item.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
+                          onError={(e) => {
+                            if (item.fallbackUrl && e.target.src !== item.fallbackUrl) {
+                              e.target.src = item.fallbackUrl;
+                            }
+                          }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#4A0E2E]/60 via-transparent to-transparent opacity-60" />
+                        <div className="absolute bottom-3 left-3 px-3 py-1 rounded-full bg-white/80 backdrop-blur-md text-[11px] font-bold text-[#831843] border border-pink-200">
+                          {item.badge}
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="space-y-4 text-left">
+                        <div className="space-y-1">
+                          <div className="flex items-center text-xs text-[#831843]">
+                            <Icons.Calendar className="w-3.5 h-3.5 mr-1.5 text-[#BE185D]" />
+                            <span className="font-bold">{item.date}</span>
+                          </div>
+                          <div className="flex items-center text-xs text-[#B45309]">
+                            <Icons.MapPin className="w-3.5 h-3.5 mr-1.5 text-[#D97706]" />
+                            <span className="font-semibold">{item.location}</span>
+                          </div>
+                        </div>
+
+                        <p className="text-sm sm:text-base text-[#521731] leading-relaxed font-normal">
+                          {item.description}
+                        </p>
+
+                        <div className="pt-2">
+                          <button
+                            onClick={goToNextPage}
+                            className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-[#BE185D] via-[#DB2777] to-[#E11D48] text-white font-bold text-sm shadow-[0_8px_20px_rgba(219,39,119,0.3)] hover:shadow-[0_12px_28px_rgba(219,39,119,0.45)] transition-all flex items-center justify-center space-x-2 hover:scale-105"
+                          >
+                            <span>{currentPage === 3 ? "Continue to Vault of Wishes" : "Next Chapter"}</span>
+                            <Icons.ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+            </main>
+          )}
+
+          {/* ================================================================== */}
+          {/* SCREEN 4: THE MYSTERY KEY & WISHES GAME                            */}
+          {/* ================================================================== */}
+          {currentPage === 4 && (
+            <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 sm:px-12 md:px-16 py-6 max-w-5xl mx-auto w-full animate-fade-in">
+              <div className="w-full space-y-6 text-center">
+                <div className="space-y-2">
+                  <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-pink-100 border border-pink-300 text-[#9D174D] text-xs font-bold uppercase tracking-wider shadow-sm">
+                    <Icons.Key className="w-3.5 h-3.5 text-[#BE185D]" />
+                    <span>Step 4 of 5 • Destiny Game</span>
+                  </div>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold font-serif text-[#4A0E2E]">
+                    {BIRTHDAY_DATA.wishesGame.title}
+                  </h2>
+                  <p className="text-[#6B2D45] text-sm max-w-lg mx-auto font-medium">
+                    {BIRTHDAY_DATA.wishesGame.subtitle}
+                  </p>
+                </div>
+
+                {/* 4 Treasure Chests */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 pt-2">
+                  {BIRTHDAY_DATA.wishesGame.chests.map((chest) => (
+                    <div
+                      key={chest.id}
+                      onClick={() => handleChestClick(chest)}
+                      className="group relative cursor-pointer bg-white/85 border border-pink-200/90 hover:border-pink-400 rounded-3xl p-5 text-center shadow-[0_10px_25px_rgba(190,24,93,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_15px_35px_rgba(190,24,93,0.18)] flex flex-col items-center justify-between min-h-[240px]"
+                    >
+                      <div className="w-full flex justify-end">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-pink-100 border border-pink-200 text-[#9D174D]">
+                          Chest #{chest.id}
+                        </span>
+                      </div>
+
+                      <div className="my-2 relative">
+                        <div className="absolute inset-0 bg-pink-400/20 rounded-full blur-xl group-hover:bg-pink-400/40 transition-all" />
+                        <div className="relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#FFF0F4] to-[#FCE7F0] border-2 border-pink-300 flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner">
+                          <Icons.Gift className="w-8 h-8 text-[#BE185D] group-hover:rotate-6 transition-transform" />
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="font-bold text-[#4A0E2E] text-sm sm:text-base mb-1 group-hover:text-[#BE185D] transition-colors">
+                          {chest.title}
+                        </h3>
+                        <p className="text-xs text-[#7C334E]">Unlock destiny wish</p>
+                      </div>
+
+                      <div className="mt-3 w-full">
+                        <span className="inline-flex items-center justify-center w-full py-2 px-3 rounded-xl bg-pink-50 border border-pink-200 text-xs font-bold text-[#9D174D] group-hover:bg-[#BE185D] group-hover:text-white group-hover:border-[#BE185D] transition-all">
+                          <Icons.Key className="w-3.5 h-3.5 mr-1.5" />
+                          Open Chest
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-4 flex justify-center">
+                  <button
+                    onClick={goToNextPage}
+                    className="px-7 py-3 rounded-full bg-gradient-to-r from-[#BE185D] via-[#DB2777] to-[#E11D48] text-white font-bold text-sm shadow-[0_8px_25px_rgba(219,39,119,0.35)] flex items-center space-x-2 transition-all hover:scale-105"
+                  >
+                    <span>Continue to Your Birthday Cake 🎂</span>
+                    <Icons.ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </main>
+          )}
+
+          {/* WISHES MODAL SUMMARY */}
+          {isModalOpen && selectedChest && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-md animate-fade-in">
+              <div className="relative w-full max-w-2xl bg-[#FFF5F8] border-2 border-pink-300 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-pink-100 hover:bg-pink-200 text-[#831843] transition-colors"
+                >
+                  <Icons.X className="w-5 h-5" />
+                </button>
+
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-pink-100 border border-pink-300 text-[#9D174D] text-xs font-bold uppercase tracking-wider mb-2">
+                    <Icons.Star className="w-3.5 h-3.5 fill-[#BE185D] text-[#BE185D]" />
+                    <span>Your Destiny Wish Revealed</span>
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-[#4A0E2E] font-serif">
+                    {selectedChest.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#7C334E] mt-1 font-medium">
+                    You chose this chest, but all these wishes are woven into my heart for you, Umang:
+                  </p>
+                </div>
+
+                {/* Destiny Highlight Card */}
+                <div className="relative mb-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#FCE7F0] to-[#FFE4EE] border-2 border-[#BE185D] shadow-[0_8px_25px_rgba(190,24,93,0.15)]">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-[#9D174D]">
+                      ★ Unlocked Destiny Wish ★
+                    </span>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#BE185D] text-white font-bold">
+                      {selectedChest.badge}
+                    </span>
+                  </div>
+                  <h4 className="text-xl font-bold font-serif text-[#4A0E2E] mb-2">
+                    "{selectedChest.wishTitle}"
+                  </h4>
+                  <p className="text-sm text-[#521731] leading-relaxed font-normal">
+                    {selectedChest.wishText}
+                  </p>
+                </div>
+
+                {/* Summary of ALL Wishes */}
+                <div className="space-y-3">
+                  <h5 className="text-xs font-bold uppercase tracking-wider text-[#9D174D] px-1 text-left">
+                    All Wishes Together
+                  </h5>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {BIRTHDAY_DATA.wishesGame.chests.map((chest) => {
+                      const isSelected = chest.id === selectedChest.id;
+                      return (
+                        <div
+                          key={chest.id}
+                          className={`p-3.5 rounded-xl border text-left text-xs transition-all ${isSelected
+                              ? 'bg-pink-100/90 border-[#BE185D] text-[#4A0E2E] font-bold shadow-sm'
+                              : 'bg-white border-pink-200 text-[#6B2D45]'
+                            }`}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-bold text-[#831843]">{chest.title}</span>
+                            {isSelected && <Icons.CheckCircle2 className="w-3.5 h-3.5 text-[#BE185D]" />}
+                          </div>
+                          <p className="line-clamp-2 text-[11px] leading-snug font-normal">
+                            {chest.wishText}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+                  <button
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setCurrentPage(5);
+                    }}
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-gradient-to-r from-[#BE185D] via-[#DB2777] to-[#E11D48] text-white font-bold text-sm shadow-md hover:scale-105 transition-all"
+                  >
+                    Go to Birthday Cake 🎂 ➔
+                  </button>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-pink-100 hover:bg-pink-200 text-[#831843] text-xs font-semibold transition-all"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ================================================================== */}
+          {/* SCREEN 5: THE CELEBRATION CLIMAX (VELVET ROSE CAKE)               */}
+          {/* ================================================================== */}
+          {currentPage === 5 && (
+            <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 sm:px-12 md:px-16 py-6 max-w-3xl mx-auto w-full text-center animate-fade-in">
+              <div className="space-y-3 mb-6">
+                <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-pink-100 border border-pink-300 text-[#9D174D] text-xs font-bold uppercase tracking-wider shadow-sm">
+                  <Icons.PartyPopper className="w-3.5 h-3.5 text-[#BE185D]" />
+                  <span>Step 5 of 5 • The Grand Climax</span>
+                </div>
+                <h2 className="text-3xl sm:text-5xl font-black font-serif text-[#4A0E2E]">
+                  {BIRTHDAY_DATA.cakeSection.title}
+                </h2>
+                <p className="text-sm sm:text-base text-[#6B2D45] max-w-md mx-auto font-medium">
+                  {BIRTHDAY_DATA.cakeSection.subtitle}
+                </p>
+              </div>
+
+              {/* Velvet Rose & Cream Cake */}
+              <div className="relative mx-auto w-64 sm:w-72 h-64 sm:h-72 flex flex-col items-center justify-center mb-6">
+                <div className="absolute bottom-4 w-52 h-10 rounded-full bg-rose-400/30 blur-2xl" />
+
+                {/* 3 Candles */}
+                <div className="flex space-x-5 mb-2 relative z-20">
+                  {[1, 2, 3].map((candleIndex) => (
+                    <div key={candleIndex} className="flex flex-col items-center">
+                      <div className="h-6 flex items-end">
+                        {!candlesBlown ? (
+                          <div className="w-3.5 h-5 bg-gradient-to-t from-amber-500 via-yellow-300 to-white rounded-full animate-pulse shadow-[0_0_15px_#F59E0B]" />
+                        ) : (
+                          <div className="w-1 h-3 bg-gray-400/60 rounded-full" />
+                        )}
+                      </div>
+                      <div className="w-2.5 h-9 bg-gradient-to-b from-amber-200 via-rose-300 to-amber-200 rounded-sm shadow-md border-x border-amber-300/40" />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Top Tier */}
+                <div className="relative z-10 w-36 h-14 bg-gradient-to-r from-[#DB2777] via-[#BE185D] to-[#DB2777] rounded-t-2xl border-t-4 border-pink-100 shadow-lg flex items-center justify-center">
+                  <div className="flex items-center space-x-1.5">
+                    <span className="text-xs">🌹</span>
+                    <span className="text-[11px] font-bold text-white tracking-wider">Umang</span>
+                    <span className="text-xs">🌹</span>
+                  </div>
+                </div>
+
+                {/* Middle Tier */}
+                <div className="relative z-10 w-48 h-16 bg-gradient-to-r from-[#BE185D] via-[#9D174D] to-[#BE185D] border-t-2 border-pink-100/80 border-b-4 border-[#831843] shadow-md flex items-center justify-center">
+                  <div className="flex items-center space-x-1.5">
+                    <span className="text-amber-200 text-xs">✨</span>
+                    <span className="text-[11px] font-extrabold tracking-widest text-white uppercase">
+                      Forever My Baby
+                    </span>
+                    <span className="text-amber-200 text-xs">✨</span>
+                  </div>
+                </div>
+
+                {/* Base Tier */}
+                <div className="relative z-10 w-60 h-16 bg-gradient-to-r from-[#9D174D] via-[#831843] to-[#9D174D] rounded-b-2xl border-t-2 border-pink-100/70 shadow-2xl flex items-center justify-center">
+                  <div className="flex space-x-3 items-center">
+                    <Icons.Heart className="w-4 h-4 fill-pink-200 text-pink-200" />
+                    <span className="text-xs">🍓</span>
+                    <Icons.Heart className="w-4 h-4 fill-amber-200 text-amber-200" />
+                    <span className="text-xs">🍓</span>
+                    <Icons.Heart className="w-4 h-4 fill-pink-200 text-pink-200" />
+                  </div>
+                </div>
+
+                {/* Cake Stand */}
+                <div className="w-72 h-5 bg-gradient-to-r from-pink-300 via-rose-100 to-pink-300 rounded-full shadow-[0_5px_20px_rgba(219,39,119,0.25)] -mt-1 border-t border-white" />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+                {!candlesBlown ? (
+                  <button
+                    onClick={handleBlowCandles}
+                    className="px-8 py-4 rounded-full bg-gradient-to-r from-[#BE185D] via-[#E11D48] to-[#F43F5E] text-white font-extrabold text-base shadow-[0_10px_35px_rgba(225,29,72,0.35)] hover:shadow-[0_15px_45px_rgba(225,29,72,0.55)] hover:scale-105 active:scale-95 transition-all flex items-center space-x-2"
+                  >
+                    <Icons.Flame className="w-5 h-5 text-yellow-200" />
+                    <span>Blow Out The Candles! 🎂</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={fireCelebrationPoppers}
+                    className="px-8 py-4 rounded-full bg-gradient-to-r from-[#BE185D] via-[#DB2777] to-[#E11D48] text-white font-extrabold text-base shadow-[0_10px_35px_rgba(190,24,93,0.4)] hover:scale-105 active:scale-95 transition-all flex items-center space-x-2 animate-bounce"
+                  >
+                    <Icons.PartyPopper className="w-5 h-5 text-pink-100" />
+                    <span>Pop More Confetti! 🎉</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Grand Message Card */}
+              {candlesBlown && (
+                <div className="p-6 sm:p-10 rounded-3xl bg-white/95 border-2 border-pink-300 shadow-[0_20px_60px_rgba(190,24,93,0.18)] animate-fade-in max-w-2xl mx-auto space-y-6 mb-8 backdrop-blur-md text-left">
+                  <div className="flex items-center justify-between border-b border-pink-200/80 pb-4">
+                    <div className="inline-flex items-center space-x-2 text-[#9D174D] font-serif text-sm sm:text-base font-bold">
+                      <span className="text-xl">💌</span>
+                      <span>A Letter Straight From My Heart</span>
+                    </div>
+                    <div className="flex space-x-1 text-amber-400">
+                      <Icons.Star className="w-4 h-4 fill-amber-400" />
+                      <Icons.Star className="w-4 h-4 fill-amber-400" />
+                      <Icons.Star className="w-4 h-4 fill-amber-400" />
+                    </div>
+                  </div>
+
+                  <div className="text-[#4A0E2E] text-sm sm:text-base leading-relaxed whitespace-pre-line font-serif space-y-4">
+                    {BIRTHDAY_DATA.cakeSection.birthdayMessage}
+                  </div>
+
+                  <div className="pt-4 border-t border-pink-200/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="text-xs text-[#831843] font-bold tracking-wider uppercase">
+                      Forever with all my love ❤️
+                    </div>
+                    <button
+                      onClick={() => { setCurrentPage(1); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-pink-100 hover:bg-gradient-to-r hover:from-[#BE185D] hover:to-[#DB2777] text-[#831843] hover:text-white text-xs font-bold transition-all shadow-sm hover:scale-105"
+                    >
+                      <Icons.RotateCcw className="w-3.5 h-3.5" />
+                      <span>Replay Our Journey From Step 1</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </main>
+          )}
+
+        </div>
+      );
+    }
+
+    // Render the React Application
+    const rootElement = document.getElementById('root');
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(<BirthdayWebsite />);
+  </script>
+</body>
+
+</html>
